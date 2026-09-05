@@ -1,0 +1,1088 @@
+﻿<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>우정 관리 시스템</title>
+
+
+
+<style>
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    background: radial-gradient(circle at top, #401326, #090909 65%);
+
+    color: white;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    overflow: hidden;
+
+}
+
+
+
+.bg {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+}
+
+
+
+.star {
+
+    position: absolute;
+
+    animation: float 7s linear infinite;
+
+    opacity: .4;
+
+}
+
+
+
+@keyframes float {
+
+    from {
+
+        transform: translateY(110vh) rotate(0deg);
+
+    }
+
+    to {
+
+        transform: translateY(-20vh) rotate(360deg);
+
+    }
+
+}
+
+
+
+.container {
+
+    width: min(92%, 500px);
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+
+
+.header {
+
+    text-align: center;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+.badge {
+
+    display: inline-block;
+
+    padding: 7px 14px;
+
+    border-radius: 30px;
+
+    background: rgba(255,255,255,.08);
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    color: #ff9bb1;
+
+}
+
+
+
+h1 {
+
+    font-size: 38px;
+
+    margin: 15px 0 5px;
+
+}
+
+
+
+.subtitle {
+
+    color: #999;
+
+}
+
+
+
+.card {
+
+    background: rgba(15,15,18,.94);
+
+    border: 1px solid rgba(255,255,255,.14);
+
+    border-radius: 28px;
+
+    padding: 30px;
+
+    box-shadow:
+
+        0 20px 80px rgba(0,0,0,.6),
+
+        0 0 50px rgba(255,40,90,.15);
+
+    backdrop-filter: blur(15px);
+
+}
+
+
+
+.step {
+
+    color: #ff5579;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+label {
+
+    display: block;
+
+    color: #bbb;
+
+    margin: 17px 0 7px;
+
+}
+
+
+
+input,
+
+select,
+
+textarea {
+
+    width: 100%;
+
+    border: 1px solid #3a3a3a;
+
+    background: #101014;
+
+    color: white;
+
+    border-radius: 12px;
+
+    padding: 13px;
+
+    font-size: 15px;
+
+    outline: none;
+
+}
+
+
+
+textarea {
+
+    height: 110px;
+
+    resize: none;
+
+}
+
+
+
+input:focus,
+
+select:focus,
+
+textarea:focus {
+
+    border-color: #ff5579;
+
+    box-shadow: 0 0 15px rgba(255,60,100,.15);
+
+}
+
+
+
+.buttons {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+}
+
+
+
+button {
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+
+
+.breakup {
+
+    background: #ff4168;
+
+    color: white;
+
+}
+
+
+
+.apology {
+
+    background: white;
+
+    color: #111;
+
+}
+
+
+
+button:hover {
+
+    transform: translateY(-2px) scale(1.02);
+
+}
+
+
+
+#checking,
+
+#result,
+
+#apologyResult {
+
+    display: none;
+
+    text-align: center;
+
+}
+
+
+
+.loader {
+
+    width: 60px;
+
+    height: 60px;
+
+    margin: 25px auto;
+
+    border: 5px solid #333;
+
+    border-top-color: #ff4168;
+
+    border-radius: 50%;
+
+    animation: spin 1s linear infinite;
+
+}
+
+
+
+@keyframes spin {
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
+}
+
+
+
+.progressBox {
+
+    width: 100%;
+
+    height: 9px;
+
+    background: #292929;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+}
+
+
+
+.progress {
+
+    width: 0%;
+
+    height: 100%;
+
+    background: #ff4168;
+
+    transition: width .1s;
+
+}
+
+
+
+.percent {
+
+    color: #888;
+
+}
+
+
+
+.bigHeart {
+
+    font-size: 65px;
+
+    animation: beat 1s infinite;
+
+}
+
+
+
+@keyframes beat {
+
+    50% {
+
+        transform: scale(1.15);
+
+    }
+
+}
+
+
+
+.final {
+
+    font-size: 31px;
+
+    font-weight: bold;
+
+    color: #ff4168;
+
+    margin: 15px 0;
+
+}
+
+
+
+.success {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    color: #ff9bb1;
+
+}
+
+
+
+.messageBox {
+
+    background: #111;
+
+    border: 1px solid #333;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    margin-top: 15px;
+
+    color: #aaa;
+
+    font-size: 13px;
+
+    text-align: left;
+
+}
+
+
+
+.code {
+
+    margin-top: 18px;
+
+    color: #666;
+
+    font-size: 11px;
+
+}
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="bg">
+
+    <div class="star" style="left:8%;animation-delay:0s;">💔</div>
+
+    <div class="star" style="left:22%;animation-delay:2s;">✨</div>
+
+    <div class="star" style="left:42%;animation-delay:4s;">🖤</div>
+
+    <div class="star" style="left:65%;animation-delay:1s;">💔</div>
+
+    <div class="star" style="left:85%;animation-delay:3s;">✨</div>
+
+</div>
+
+
+
+<div class="container">
+
+
+
+    <div class="header">
+
+        <div class="badge">FRIENDSHIP MANAGEMENT SYSTEM</div>
+
+        <h1>💔 우정 관리센터</h1>
+
+        <div class="subtitle">
+
+            친구관계의 미래를 결정해주세요
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+
+
+        <!-- 신청 화면 -->
+
+
+
+        <div id="form">
+
+
+
+            <div class="step">
+
+                STEP 01 · 관계 정보 입력
+
+            </div>
+
+
+
+            <label>신청자 이름</label>
+
+            <input id="name" placeholder="내 이름">
+
+
+
+            <label>친구 이름</label>
+
+            <input id="target" placeholder="친구 이름">
+
+
+
+            <label>현재 기분</label>
+
+
+
+            <select id="reason">
+
+                <option>조금 화남 😑</option>
+
+                <option>많이 화남 😡</option>
+
+                <option>진짜 킹받음 🤬</option>
+
+                <option>그냥 장난임 😂</option>
+
+                <option>잘 모르겠음 🫠</option>
+
+            </select>
+
+
+
+            <label>
+
+                💌 손절하기 싫다면 사과문을 작성하세요
+
+            </label>
+
+
+
+            <textarea
+
+                id="apology"
+
+                placeholder="미안한 마음을 자유롭게 적어보세요..."
+
+            ></textarea>
+
+
+
+            <div class="buttons">
+
+
+
+                <button
+
+                    class="breakup"
+
+                    onclick="breakup()">
+
+                    💔 손절하기
+
+                </button>
+
+
+
+                <button
+
+                    class="apology"
+
+                    onclick="makePeace()">
+
+                    ❤️ 화해하기
+
+                </button>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+        <!-- 손절 심사 -->
+
+
+
+        <div id="checking">
+
+
+
+            <div class="step">
+
+                STEP 02 · 최종 심사
+
+            </div>
+
+
+
+            <div class="loader"></div>
+
+
+
+            <div id="status">
+
+                우정 데이터를 분석하는 중...
+
+            </div>
+
+
+
+            <br>
+
+
+
+            <div class="progressBox">
+
+                <div
+
+                    class="progress"
+
+                    id="progress">
+
+                </div>
+
+            </div>
+
+
+
+            <p class="percent" id="percent">
+
+                0%
+
+            </p>
+
+
+
+        </div>
+
+
+
+
+
+        <!-- 손절 결과 -->
+
+
+
+        <div id="result">
+
+
+
+            <div class="step">
+
+                FINAL RESULT
+
+            </div>
+
+
+
+            <div class="bigHeart">
+
+                💔
+
+            </div>
+
+
+
+            <div id="breakupText"></div>
+
+
+
+            <div class="code" id="breakupCode"></div>
+
+
+
+        </div>
+
+
+
+
+
+        <!-- 화해 결과 -->
+
+
+
+        <div id="apologyResult">
+
+
+
+            <div class="step">
+
+                FRIENDSHIP RESTORED
+
+            </div>
+
+
+
+            <div class="bigHeart">
+
+                ❤️
+
+            </div>
+
+
+
+            <div class="success">
+
+                화해 신청 완료!
+
+            </div>
+
+
+
+            <div class="messageBox" id="apologyText"></div>
+
+
+
+            <div class="code">
+
+                화해 가능성 분석 완료 · 우정 회복 진행 중
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+
+
+
+function getInfo() {
+
+
+
+    const name =
+
+        document.getElementById("name").value.trim();
+
+
+
+    const target =
+
+        document.getElementById("target").value.trim();
+
+
+
+    if (!name || !target) {
+
+
+
+        alert("이름을 먼저 입력해주세요.");
+
+
+
+        return null;
+
+    }
+
+
+
+    return {
+
+        name: name,
+
+        target: target
+
+    };
+
+}
+
+
+
+
+
+function breakup() {
+
+
+
+    const info = getInfo();
+
+
+
+    if (!info) return;
+
+
+
+    document.getElementById("form").style.display =
+
+        "none";
+
+
+
+    document.getElementById("checking").style.display =
+
+        "block";
+
+
+
+    let progress = 0;
+
+
+
+    const timer = setInterval(() => {
+
+
+
+        progress++;
+
+
+
+        document.getElementById("progress").style.width =
+
+            progress + "%";
+
+
+
+        document.getElementById("percent").innerText =
+
+            progress + "%";
+
+
+
+        if (progress === 25) {
+
+
+
+            document.getElementById("status").innerText =
+
+                "최근 대화 기록 분석 중...";
+
+
+
+        }
+
+
+
+        if (progress === 50) {
+
+
+
+            document.getElementById("status").innerText =
+
+                "우정 지속 가능성 계산 중...";
+
+
+
+        }
+
+
+
+        if (progress === 75) {
+
+
+
+            document.getElementById("status").innerText =
+
+                "최종 손절 여부 판단 중...";
+
+
+
+        }
+
+
+
+        if (progress >= 100) {
+
+
+
+            clearInterval(timer);
+
+
+
+            setTimeout(() => {
+
+
+
+                document.getElementById("checking").style.display =
+
+                    "none";
+
+
+
+                document.getElementById("result").style.display =
+
+                    "block";
+
+
+
+                document.getElementById("breakupText").innerHTML =
+
+
+
+                    "<div>" +
+
+                    info.name +
+
+                    "님의 신청 결과</div>" +
+
+
+
+                    "<div class='final'>" +
+
+                    "나 너랑 안 놀아." +
+
+                    "</div>" +
+
+
+
+                    "<div>" +
+
+                    "💔 " +
+
+                    info.target +
+
+                    "님과의 손절 처리가 완료되었습니다." +
+
+                    "</div>";
+
+
+
+                document.getElementById("breakupCode").innerText =
+
+                    "처리번호 : SJ-" +
+
+                    Math.floor(
+
+                        100000 +
+
+                        Math.random() * 900000
+
+                    );
+
+
+
+            }, 700);
+
+        }
+
+
+
+    }, 30);
+
+}
+
+
+
+
+
+function makePeace() {
+
+
+
+    const info = getInfo();
+
+
+
+    if (!info) return;
+
+
+
+    const apology =
+
+        document.getElementById("apology").value.trim();
+
+
+
+    if (!apology) {
+
+
+
+        alert("사과문을 먼저 작성해주세요 ❤️");
+
+
+
+        return;
+
+    }
+
+
+
+    document.getElementById("form").style.display =
+
+        "none";
+
+
+
+    document.getElementById("apologyResult").style.display =
+
+        "block";
+
+
+
+    document.getElementById("apologyText").innerHTML =
+
+
+
+        "<b>" +
+
+        info.target +
+
+        "님에게 보내는 사과문</b><br><br>" +
+
+
+
+        apology +
+
+
+
+        "<br><br>" +
+
+
+
+        "❤️ 화해 신청이 정상적으로 접수되었습니다.";
+
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
+
